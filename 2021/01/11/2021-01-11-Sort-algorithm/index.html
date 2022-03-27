@@ -1,0 +1,285 @@
+<!DOCTYPE html><html lang="[&quot;zh&quot;,&quot;jp&quot;,&quot;default&quot;]"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>排序算法 | Ryo's Blog</title><script>var config = {"hostname":"https://ryojerryyu.github.io/blog","root":"/blog/","preload":false,"path":""}</script><script src="//unpkg.com/mermaid@8.13.3/dist/mermaid.min.js"></script><script>mermaid.initialize({
+  startOnLoad: false
+  , theme: 'dark'
+});</script><script src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.6.1/MathJax.js"></script><script>MathJax.Hub.Config({
+  menuSettings: {
+    zoom: "None"
+  },
+  showMathMenu: false,
+  jax: ["input/TeX","output/CommonHTML"],
+  extensions: ["tex2jax.js"],
+  TeX: {
+    extensions: ["AMSmath.js","AMSsymbols.js"],
+    equationNumbers: {
+      autoNumber: "AMS"
+    }
+  },
+  tex2jax: {
+    inlineMath: [["\\(", "\\)"]],
+    displayMath: [["\\[", "\\]"]]
+  }
+});</script><link rel="stylesheet" href="/blog/css/arknights.css"><link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.4.0/styles/atom-one-dark-reasonable.min.css"><style>@font-face {
+ font-family: BenderLight;
+ src: local('Bender'), url("/blog/font/BenderLight.ttf");
+}
+@font-face {
+ font-family: 'JetBrains Mono';
+ src: local('JetBrains Mono'), url('/blog/font/JetBrainsMono-Regular.woff2') format('woff2');
+}</style><meta name="generator" content="Hexo 6.1.0"></head><body style="background-image:url(https://ak.hypergryph.com/assets/index/images/ak/pc/bk.jpg);"><div id="cursor-container"><div id="cursor-outer"></div><div id="cursor-effect"></div></div><main><header><nav><div class="navBtn"><i class="navBtnIcon"><span class="navBtnIconBar"></span><span class="navBtnIconBar"></span><span class="navBtnIconBar"></span></i></div><ol class="navContent"><li class="navItem search-header"><input autocomplete="off" autocorrect="off" autocapitalize="none" placeholder="数据检索" spellcheck="false" maxlength="50" type="text" id="search-input"></li><li class="navItem"><a href="/blog/"><span class="navItemTitle">Home</span></a></li><li class="navItem"><a href="/blog/archives/"><span class="navItemTitle">Archives</span></a></li></ol></nav><div class="search-popup"><div id="search-result"></div></div></header><article><div id="post-bg"><div id="post-title"><h1>排序算法</h1><div id="post-info"><span>First Post:<span class="control"><time datetime="2021-01-11T14:57:10.000Z" id="date"> 2021-01-11</time></span></span><br><span>Last Update:<span class="control"><time datetime="2022-03-27T13:31:49.561Z" id="updated"> 2022-03-27</time></span></span></div></div><hr><div id="post-content"><h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>我们知道排序是算法入门基本功，排序算法有多重要想必也不需要我在这里说明了。因此这一篇就按着我的理解，聊一聊排序算法。</p>
+<p>当然我不打算随便弄个什么十大排序算法或是经典排序总结之类响当当的名头，各个算法走马看花一样拉出来遛一遍，最后变得跟网上搜索到的其他讲排序的文章一样换汤不换药。你会发现这篇文章的结构跟在网上搜索到的任何讲排序的文章都有所不同：</p>
+<p>在这篇文章里，你会发现你找不到冒泡排序——因为我认为冒泡排序只不过是一种低效率的选择排序。</p>
+<p>你会发现堆排序被当成是选择排序的一种优化——因为我认为堆排序主要在于使用了堆这种数据结构，而总体思想与选择排序相比没有太大变化。</p>
+<p>你还会找到其他与别的文章不一样的地方。因为这篇文章是我按照自己的理解来写的，我脑子里是这样想的，那文章里就是这样写的。我会按照我的理解，从纵向与横向两个维度，来理清楚各个排序算法的特性与异同。</p>
+<h1 id="整篇文章的要点"><a href="#整篇文章的要点" class="headerlink" title="整篇文章的要点"></a>整篇文章的要点</h1><p>整篇文章以纵向——算法分类、以及横向——算法评价两个维度来进行组织。</p>
+<p>排序算法可以按照以下方式来进行分类：</p>
+<ul>
+<li>基于比较的排序算法<ul>
+<li>基于分治思想<ul>
+<li>快速排序</li>
+<li>归并排序</li>
+</ul>
+</li>
+<li>基于有序区域扩展<ul>
+<li>插入排序</li>
+<li>选择排序</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>不基于比较的排序算法<ul>
+<li>计数排序</li>
+<li>桶排序</li>
+<li>基数排序</li>
+</ul>
+</li>
+</ul>
+<p>文章中还会讲一讲为什么会这么分，每种分类有什么共性，分类之间有什么差异。此外，在最后还会稍微提一提外部排序与适用于并行运算的排序等。</p>
+<p>而对于纵向分类中的每一个端点，我们又会从以下五个方面，来对各个算法进行一个总体评价：</p>
+<ul>
+<li>时间复杂度（最坏，最好，平均※）</li>
+<li>空间复杂度</li>
+<li>是否原地排序</li>
+<li>是否稳定排序</li>
+<li>能否用于链表排序</li>
+</ul>
+<p>而由于复杂度主要只关注数量级，因此在这篇文章里会在不影响计算结果的前提下对复杂度计算进行适当的近似与简化。</p>
+<h1 id="快排"><a href="#快排" class="headerlink" title="快排"></a>快排</h1><h2 id="思想"><a href="#思想" class="headerlink" title="思想"></a>思想</h2><p>分治法：先把序列分为小的部分和大的部分，再将两部分分别排序。即：复杂分割，简单合并，主要操作在于分割。</p>
+<h2 id="要点"><a href="#要点" class="headerlink" title="要点"></a>要点</h2><h3 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h3><p>推导式：T(n) = T(找) + T(左) + T(右) = O(n) + 两个子问题时间复杂度。</p>
+<ul>
+<li>最好时间复杂度为每次都正好找到最中间的一个数时时间复杂度为O（nlogn）。证明略。</li>
+<li>最坏时间复杂度为每次都正好找到最旁边的数时时间复杂度为O(n^2)。证明略。</li>
+<li><p>平均时间复杂度为O（nlogn），推导式如下：</p>
+<p>  快速排序每一步中，将元素分为左右两边需要遍历整个列表，耗时T(n)。假设最后定位的元素为最终第i个元素，则两个子问题复杂度分别为T(i)和T(n-i-1)。</p>
+<p>  则有：</p>
+<script type="math/tex; mode=display">
+  \begin{aligned}
+  T(n) &= n + \frac{\sum_{i=0}^{n-1}{T(i)+T(n-i-1)}}{n} \\
+  &=n + \frac{2}{n}\times\sum_{i=0}^{n-1}{T(i)} \\
+  \end{aligned}</script><p>  令 $\sum_{i=0}^{n}T(i) = Sum(n)$ ，即有：</p>
+<script type="math/tex; mode=display">
+  \begin{aligned}
+  T(n) &= n + \frac{2}{n} \times Sum(n-1) \\
+  Sum(n) &= \frac{n+1}{2}T(n+1) - \frac{n+1}{2}(n+1)
+  \end{aligned}</script><p>  错位相减：</p>
+<script type="math/tex; mode=display">
+  \begin{aligned}
+  Sum(n) - Sum(n-1) &= \frac{n+1}{2}T(n+1) - \frac{n+1}{2}(n+1) - \frac{n}{2}T(n) + \frac{n}{2}(n) 
+  \\
+  T(n) &= \frac{n+1}{2}T(n+1) - \frac{n}{2}T(n) - \frac{2n+1}{2} 
+  \\
+  \frac{T(n+1)}{n+2} &= \frac{T(n)}{n+1}+\frac{2n+1}{(n+1)(n+2)} 
+  \\
+  &= \frac{T(n)}{n+1}+\frac{1}{n}+\frac{1}{n+1} 
+  \\
+  &=...
+  \\
+  &= \frac{T(1)}{2}+1+2\times(\frac{1}{2}+\frac{1}{3}+...+\frac{1}{n})+\frac{1}{n+1}
+  \\
+  \\
+  \frac{T(n)}{n+1}&=\frac{T(1)}{2}+1+2\times(\frac{1}{2}+...+\frac{1}{n-1})+\frac{1}{n}
+  \\
+  &= O(1)+O(1)+O(logn)+O(\frac{1}{n})
+  \\
+  &= O(logn)
+  \end{aligned}</script><p>  其中由于 <script type="math/tex">\frac{1}{x}=\frac{d(logx)}{dx}</script> ，因此 <script type="math/tex">\frac{1}{2}+...+\frac{1}{n-1}=O(logn)</script> 。</p>
+<p>  则有：</p>
+<script type="math/tex; mode=display">\begin{aligned}
+  T(n)&=(n+1)\times O(logn)\\
+  &=O(n)\times O(logn)\\
+  &=O(nlogn)
+  \end{aligned}</script></li>
+</ul>
+<h3 id="额外空间复杂度"><a href="#额外空间复杂度" class="headerlink" title="额外空间复杂度"></a>额外空间复杂度</h3><p>考虑栈深度，额外空间复杂度为O（logn）。由于快速排序主要步骤在于分，因此必须自上而下的进行递归，无法避免栈深度。</p>
+<h3 id="原地排序"><a href="#原地排序" class="headerlink" title="原地排序"></a>原地排序</h3><p>虽然快速排序有额外空间复杂度，但并不妨碍它是一个原地排序。</p>
+<h3 id="不稳定"><a href="#不稳定" class="headerlink" title="不稳定"></a>不稳定</h3><p>堆排序在分操作时将元素左右交换，会破坏稳定性。</p>
+<h3 id="链表形式特点"><a href="#链表形式特点" class="headerlink" title="链表形式特点"></a>链表形式特点</h3><ul>
+<li>时间复杂度不变</li>
+<li>空间复杂度不变</li>
+<li>变为稳定排序※</li>
+</ul>
+<h2 id="手写时的易错点"><a href="#手写时的易错点" class="headerlink" title="手写时的易错点"></a>手写时的易错点</h2><ul>
+<li>分成左右子序列时最好完全分开（一边用<code>&lt;=</code>一边用<code>&gt;</code>），不然容易造成死循环。</li>
+<li>分左右子序列时仔细考虑最初下标位置与最终下标位置，以及对应位置的值的大小。</li>
+<li>不要忘记递归的结束条件。</li>
+</ul>
+<h1 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h1><h2 id="思想-1"><a href="#思想-1" class="headerlink" title="思想"></a>思想</h2><p>分治法：先把两个子序列各自排好序，然后再合并两个子序列。即：简单分割，复杂合并。主要步骤在于合并。</p>
+<h2 id="要点-1"><a href="#要点-1" class="headerlink" title="要点"></a>要点</h2><ul>
+<li>时间复杂度推导式：T(n) = 2T(n/2) + T(合)</li>
+<li>平均、最好、最坏时间复杂度都是O（nlogn），推导过程略。</li>
+<li>额外空间复杂度为O（n），合并时必须准备额外空间。但由于主要步骤在于合并，可以自下而上地进行迭代合并，可以不使用栈。</li>
+<li>非原地排序</li>
+<li>稳定排序</li>
+</ul>
+<h3 id="链表形式"><a href="#链表形式" class="headerlink" title="链表形式"></a>链表形式</h3><ul>
+<li>时间复杂度不变</li>
+<li>额外空间复杂度变为O(1)※</li>
+<li>稳定排序</li>
+<li>只能使用迭代形式，不能使用递归形式</li>
+</ul>
+<h2 id="易错点"><a href="#易错点" class="headerlink" title="易错点"></a>易错点</h2><ul>
+<li>合并时一边结束时另一边还未结束，需要把那一边也放入合并后序列中</li>
+<li>保持稳定排序：合并时左序列等于右序列时也采用左序列</li>
+<li>不要忘记递归结束条件</li>
+<li>不要忘记循环递进条件</li>
+</ul>
+<h2 id="进阶"><a href="#进阶" class="headerlink" title="进阶"></a>进阶</h2><ul>
+<li>原地归并排序：时间复杂度为O（log^2n），牺牲合并的时间复杂度进行原地排序。</li>
+<li>多路归并排序：使用竞标树，多路归并，用于磁盘IO。</li>
+</ul>
+<h1 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h1><h2 id="思想-2"><a href="#思想-2" class="headerlink" title="思想"></a>思想</h2><p>有序序列不断扩张，每次从无序序列中取出元素加入有序序列，直至长度为N则完成排序。</p>
+<p>每次将无序序列当前元素插入有序序列，复杂度取决于有序序列。</p>
+<h2 id="要点-2"><a href="#要点-2" class="headerlink" title="要点"></a>要点</h2><ul>
+<li>最坏、平均时间复杂度：O（n2）</li>
+<li>最好时间复杂度：基本有序情况下，O（n）</li>
+<li>额外空间复杂度：O（1）</li>
+<li>原地排序</li>
+<li>稳定排序</li>
+<li>每次插入时都要移动序列，写次数较多</li>
+<li>若查找插入位置时使用二分法查找，则可加快时间。（但不足以对时间复杂度造成影响，且最好时间复杂度也会上升为O(nlogn)）</li>
+</ul>
+<h3 id="链表形式-1"><a href="#链表形式-1" class="headerlink" title="链表形式"></a>链表形式</h3><ul>
+<li>最好，最坏，平均时间复杂度不变</li>
+<li>额外空间复杂度不变</li>
+<li>稳定排序</li>
+<li>插入时不再需要移动序列，但也不能使用二分法查找</li>
+</ul>
+<h2 id="进阶——希尔排序"><a href="#进阶——希尔排序" class="headerlink" title="进阶——希尔排序"></a>进阶——希尔排序</h2><ul>
+<li><p>要点：</p>
+<p>  插入排序的优点在于当序列基本有序时，时间复杂度可逼近为O(n)。</p>
+<p>  但插入时移动有序序列中元素所耗时间较多，而每次只移动一步。但实际上当序列分布均匀时，有序序列中排靠后的元素在整个序列中也会排靠后。</p>
+<p>  可以把序列分为几个大步长序列，在最初的几次插入放开移动步长，让大的元素直接移动到较后位置。再往后慢慢缩小步长，此时序列基本有序，可以利用基本有序时插入排序的优势。</p>
+</li>
+<li><p>时间复杂度</p>
+<ol>
+<li>当步长为2^i时，不能使时间复杂度缩短为O(nlogn)。因为一个子序列所有元素有可能比另一个子序列最大元素都要大，这时插入排序仍需进行约n^2次操作</li>
+<li>当步长为2^i时效率较低，因为当步长为4已经有序时，步长为2再比较是无用比较。但由于1.的问题，不能节省比较时间。</li>
+<li>当步长之间最小公约数较少，甚至互质时，无用比较次数会降低。</li>
+<li>最坏时间复杂度下限为$O(nlog^2n)$（当步长采用$2^i3^j$时），但一般希尔排序平均时间复杂度都为$O(n^{\frac{3}{2}})$</li>
+</ol>
+</li>
+<li>额外空间复杂度O(1)</li>
+<li>原地排序</li>
+<li>不稳定排序：希尔排序步长较大时会发生前后跳转。</li>
+<li>不能写为链表形式</li>
+</ul>
+<h1 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h1><h2 id="思想-3"><a href="#思想-3" class="headerlink" title="思想"></a>思想</h2><p>有序序列不断扩张，每次从无序序列中取出元素加入有序序列，直至长度为N则完成排序。</p>
+<p>每次将选无序序列中最小元素加到有序序列末尾，复杂度取决于无序序列。</p>
+<h2 id="要点-3"><a href="#要点-3" class="headerlink" title="要点"></a>要点</h2><ul>
+<li>最坏、平均时间复杂度：O（n2）</li>
+<li>最好时间复杂度：O（n2），如能保证无序部分的最小元素所在位置一定（堆排序），能降低时间复杂度</li>
+<li>额外空间复杂度：O（1）</li>
+<li>原地排序</li>
+<li>不稳定排序（采用元素交换策略时）</li>
+<li>每次找到最小元素后，只需交换一次位置即可，写次数较少。</li>
+<li>若找到最小元素后，不直接交换而是进行数组移动，则可进行稳定排序，但写次数变多，与插入排序相比没有优势，也不能使用二分查找进行简化。</li>
+</ul>
+<h3 id="链表形式-2"><a href="#链表形式-2" class="headerlink" title="链表形式"></a>链表形式</h3><ul>
+<li>最好，最坏，平均时间复杂度不变</li>
+<li>额外空间复杂度不变</li>
+<li>变为稳定排序※（因为链表不需要数组移动，稳定排序方式的缺点得以消除）</li>
+</ul>
+<h2 id="进阶——堆排序"><a href="#进阶——堆排序" class="headerlink" title="进阶——堆排序"></a>进阶——堆排序</h2><ul>
+<li><p>要点：</p>
+<p>  选择排序中耗时最多的是取出无序序列中最小值的时间，需要遍历整个无序序列。</p>
+<p>  但实际上我们只关心无序序列中的最小值，而不关心其他值的位置。通过将无序序列建为堆，减少选择时间，降低总的时间复杂度。</p>
+</li>
+<li><p>时间复杂度O（nlogn）</p>
+</li>
+<li>额外空间复杂度O（1）</li>
+<li>原地排序</li>
+<li>不稳定排序</li>
+<li><p>操作时间复杂度：每次向下比较关注一个节点与其左右子堆顶元素，每次向上比较只关注节点与其父元素（大顶堆，堆大小为n）</p>
+<ul>
+<li><p>下沉：向下比较，若顶元素不是最大，将顶元素与较大的子堆堆顶元素交换。递归处理该子堆顶元素，直到向下比较顶元素最大。</p>
+<p>  最好时间复杂度O（1），最坏时间复杂度为O（h）=O（logn），平均O（logn）</p>
+</li>
+<li><p>上浮：向上比较，若元素比其上层要大，交换该元素与其上层元素。递归处理其上层元素，直到向上比较不比上层要大。</p>
+<p>  最好时间复杂度O（1），最坏时间复杂度O（h）=O（logn），平均O（logn）</p>
+</li>
+<li><p>入堆：堆扩容一位，将新元素插到尾部，将该元素上浮，最坏、平均时间复杂度O（logn）</p>
+</li>
+<li>出堆：取出堆顶元素，将尾部放到堆顶，将该元素下沉，最坏、平均时间复杂度O（logn）</li>
+<li>缺点：通常堆尾元素较小，出堆时将堆尾元素放到堆顶再下沉基本要沉到堆底，无用比较较多</li>
+</ul>
+</li>
+<li><p>建堆时间复杂度O（n）</p>
+<ul>
+<li><p>策略1：从头开始建堆，逐个元素插入，时间复杂度取决于最后一层，时间复杂度为O（nlogn）</p>
+<ul>
+<li>每次将堆扩容一位，将末尾元素上浮。</li>
+<li><p>时间复杂度推导：</p>
+<p>  每次插入时间：</p>
+<script type="math/tex; mode=display">\begin{aligned} T(i) &= h\\
+  &= logi
+  \end{aligned}</script><p>  则有总时间：</p>
+<script type="math/tex; mode=display">\begin{aligned}
+  T(n) &= \sum_{i=0}^{n}logi\\
+  &= 1\times1 + 2\times2+ 3\times4 + ...+h\times \frac{n}{2} \\
+  \\
+  2T(n) &= 1\times2 + 2\times4+ 3\times8 + ...+h\times n \\
+  \\
+  2T(n)-T(n) &= h\times n - (1+2+4+...+2^{h-1}) \\
+  &= h\times n - O(2^h) \\
+  \\
+  T(n) &= nlogn - O(2^h) \\
+  &= O(nlogn)
+  \end{aligned}</script><p>  即时间复杂度为$O(nlogn)$</p>
+</li>
+</ul>
+</li>
+<li><p>策略2：从后开始建堆，小堆合并（逐个元素下沉），时间复杂度为O（n）</p>
+<ul>
+<li>每次堆合并时，有三部分：左子堆，右子堆，顶元素。下沉顶元素。</li>
+<li><p>时间复杂度推导：</p>
+<p>  第i个元素合并时，时间为：</p>
+<script type="math/tex; mode=display">\begin{aligned}
+  T(i) &= h_{子堆}
+  \end{aligned}</script><p>  则有总时间：</p>
+<script type="math/tex; mode=display">\begin{aligned}
+  T(n) &= \sum_{i=0}^{n} (h_{子堆}) \\
+  &= h + (h-1)\times2 + ... + 2 \times \frac{n}{4} + 1 \times\frac{n}{2}\\
+  \\
+  2T(n) &= h \times 2 + (h-1) \times 4 + ... + 2 \times \frac{n}{2} + n \\
+  \\
+  2T(n) - T(n) &= n + \frac{n}{2} + ... + 2 - h \\
+  \\
+  T(n) &= O(n) - h \\ 
+  &= O(n)
+  \end{aligned}</script><p>  即时间复杂度为 <script type="math/tex">O(n)</script> </p>
+</li>
+<li><p>虽说每步是做一个小堆合并，但实际上从堆尾到堆头遍历，相当于仅关注元素没有稳定，相当于可以直接使用下沉操作。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="基于比较的排序算法时间复杂度下限：逆序对思想"><a href="#基于比较的排序算法时间复杂度下限：逆序对思想" class="headerlink" title="基于比较的排序算法时间复杂度下限：逆序对思想"></a>基于比较的排序算法时间复杂度下限：逆序对思想</h1><p>基于比较的排序算法可以看作序列逆序对的消除。完全随机序列逆序对数量为O(n^2)，若一次元操作只消除一个逆序对，则时间复杂度不会低于O(n^2)。降低时间复杂度关键在于一次消除多个逆序对。</p>
+<ol>
+<li>希尔排序通过增大最初的步长来企图一次消除多个逆序对。</li>
+<li>归并排序消除逆序对最主要在于归并步骤。最后几次合并每个子步骤用O(1)时间消除O(n)个逆序对。</li>
+<li>快速排序消除逆序对最主要在于划分步骤。每个划分步骤用O(n)时间消除O(n)+O(左长度×右长度)个逆序对。</li>
+<li>堆排序逆序对消除方式比较Tricky，但可以看出消除逆序对大致在于出堆步骤，通过O(logn)时间复杂度消除O(n)个逆序对。（左小右大排序时需要建立左大右小的大顶堆，建堆时基本没有消除逆序对）</li>
+</ol>
+<h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>这篇文章我们主要关注了排序算法中的大头——基于比较的排序算法。在下篇文章，我们再来看一下不基于比较的排序算法，以及外排序与并行排序。</p>
+<div id="paginator"></div></div><div id="post-footer"><div id="pages"><div id="footer-link" style="right: calc(50% - 1px);order: 1;border-right: 1px solid #fe2;padding-left: unset;max-width: calc(50% - 4px);"><a href="/blog/2021/08/21/2021-08-21-The-beauty-of-design-parten/">← Next 设计模式之美读书笔记</a></div><div id="footer-link" style="left: 50%;order: 0;border-left: 1px solid #fe2;padding-right: unset;max-width: calc(50% - 5px);"><a href="/blog/2020/08/01/2020-08-02-python-dict/">Python字典的实现原理 Prev →</a></div></div></div></div><div id="bottom-btn"><a id="to-top" onClick="index.scrolltop();" title="to top" style="opacity: 0; display: none;">∧</a></div></article><div class="aside-box"><aside><div id="aside-top"><div id="about"><a href="/blog/" id="logo"><img src="https://ak.hypergryph.com/assets/index/images/ak/pc/faction/1.png" alt="Logo"></a><h1 id="Dr"><a href="/">Ryo Jerry Yu</a></h1><div id="description"><p>记录一些小事情。</p></div><!--if page.published === undefined--><section id="total"><a id="total-archives" href="/blog/archives"><span class="total-title">Archives Total:</span><span class="total-number">9</span></a><div id="total-tags"><span class="total-title">Tags:</span><span class="total-number">16</span></div><div id="total-categories"><span class="total-title">Categories:</span><span class="total-number">0</span></div></section></div><div id="aside-block"><div id="toc-div"><h1>INDEX</h1><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BA%8F%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">序言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B4%E7%AF%87%E6%96%87%E7%AB%A0%E7%9A%84%E8%A6%81%E7%82%B9"><span class="toc-number">2.</span> <span class="toc-text">整篇文章的要点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BF%AB%E6%8E%92"><span class="toc-number">3.</span> <span class="toc-text">快排</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E6%83%B3"><span class="toc-number">3.1.</span> <span class="toc-text">思想</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A6%81%E7%82%B9"><span class="toc-number">3.2.</span> <span class="toc-text">要点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="toc-number">3.2.1.</span> <span class="toc-text">时间复杂度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%9D%E5%A4%96%E7%A9%BA%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="toc-number">3.2.2.</span> <span class="toc-text">额外空间复杂度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E5%9C%B0%E6%8E%92%E5%BA%8F"><span class="toc-number">3.2.3.</span> <span class="toc-text">原地排序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8D%E7%A8%B3%E5%AE%9A"><span class="toc-number">3.2.4.</span> <span class="toc-text">不稳定</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%93%BE%E8%A1%A8%E5%BD%A2%E5%BC%8F%E7%89%B9%E7%82%B9"><span class="toc-number">3.2.5.</span> <span class="toc-text">链表形式特点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%8B%E5%86%99%E6%97%B6%E7%9A%84%E6%98%93%E9%94%99%E7%82%B9"><span class="toc-number">3.3.</span> <span class="toc-text">手写时的易错点</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F"><span class="toc-number">4.</span> <span class="toc-text">归并排序</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E6%83%B3-1"><span class="toc-number">4.1.</span> <span class="toc-text">思想</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A6%81%E7%82%B9-1"><span class="toc-number">4.2.</span> <span class="toc-text">要点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%93%BE%E8%A1%A8%E5%BD%A2%E5%BC%8F"><span class="toc-number">4.2.1.</span> <span class="toc-text">链表形式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%98%93%E9%94%99%E7%82%B9"><span class="toc-number">4.3.</span> <span class="toc-text">易错点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E9%98%B6"><span class="toc-number">4.4.</span> <span class="toc-text">进阶</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F"><span class="toc-number">5.</span> <span class="toc-text">插入排序</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E6%83%B3-2"><span class="toc-number">5.1.</span> <span class="toc-text">思想</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A6%81%E7%82%B9-2"><span class="toc-number">5.2.</span> <span class="toc-text">要点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%93%BE%E8%A1%A8%E5%BD%A2%E5%BC%8F-1"><span class="toc-number">5.2.1.</span> <span class="toc-text">链表形式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E9%98%B6%E2%80%94%E2%80%94%E5%B8%8C%E5%B0%94%E6%8E%92%E5%BA%8F"><span class="toc-number">5.3.</span> <span class="toc-text">进阶——希尔排序</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%80%89%E6%8B%A9%E6%8E%92%E5%BA%8F"><span class="toc-number">6.</span> <span class="toc-text">选择排序</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E6%83%B3-3"><span class="toc-number">6.1.</span> <span class="toc-text">思想</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A6%81%E7%82%B9-3"><span class="toc-number">6.2.</span> <span class="toc-text">要点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%93%BE%E8%A1%A8%E5%BD%A2%E5%BC%8F-2"><span class="toc-number">6.2.1.</span> <span class="toc-text">链表形式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E9%98%B6%E2%80%94%E2%80%94%E5%A0%86%E6%8E%92%E5%BA%8F"><span class="toc-number">6.3.</span> <span class="toc-text">进阶——堆排序</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E6%AF%94%E8%BE%83%E7%9A%84%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E4%B8%8B%E9%99%90%EF%BC%9A%E9%80%86%E5%BA%8F%E5%AF%B9%E6%80%9D%E6%83%B3"><span class="toc-number">7.</span> <span class="toc-text">基于比较的排序算法时间复杂度下限：逆序对思想</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9C%80%E5%90%8E"><span class="toc-number">8.</span> <span class="toc-text">最后</span></a></li></ol></div></div></div><footer><nobr><span class="text-title">©</span><span class="text-content"></span></nobr><br><nobr><span class="text-title">ICP</span><span class="text-content"></span></nobr><br><text>published with <a target="_blank" rel="noopener" href="http://hexo.io">Hexo</a></text><text> Theme <a target="_blank" rel="noopener" href="https://github.com/Yue-plus/hexo-theme-arknights">Arknight</a></text><wbr><text>by <a target="_blank" rel="noopener" href="https://github.com/Yue-plus">Yue_plus</a></text></footer></aside></div></main><canvas id="canvas-dust"></canvas><script src="/js/search.js"></script><script>const reset=_=>{mermaid.init(undefined, ('.mermaid'));}</script><script src="//unpkg.com/@highlightjs/cdn-assets@11.4.0/highlight.min.js"></script><script src="/blog/js/arknights.js"></script><script>document.addEventListener("load",reset())</script></body></html>
