@@ -1,0 +1,96 @@
+<!DOCTYPE html><html lang="[&quot;zh&quot;,&quot;jp&quot;,&quot;default&quot;]"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>为什么使用在齐次坐标下矩阵乘法能表示点平移？ | Ryo's Blog</title><script>var config = {"hostname":"https://ryojerryyu.github.io/blog","root":"/blog/","preload":false,"path":""}</script><script src="//unpkg.com/mermaid@8.13.3/dist/mermaid.min.js"></script><script>mermaid.initialize({
+  startOnLoad: false
+  , theme: 'dark'
+});</script><script src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.6.1/MathJax.js"></script><script>MathJax.Hub.Config({
+  menuSettings: {
+    zoom: "None"
+  },
+  showMathMenu: false,
+  jax: ["input/TeX","output/CommonHTML"],
+  extensions: ["tex2jax.js"],
+  TeX: {
+    extensions: ["AMSmath.js","AMSsymbols.js"],
+    equationNumbers: {
+      autoNumber: "AMS"
+    }
+  },
+  tex2jax: {
+    inlineMath: [["\\(", "\\)"]],
+    displayMath: [["\\[", "\\]"]]
+  }
+});</script><link rel="stylesheet" href="/blog/css/arknights.css"><link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.4.0/styles/atom-one-dark-reasonable.min.css"><style>@font-face {
+ font-family: BenderLight;
+ src: local('Bender'), url("/blog/font/BenderLight.ttf");
+}
+@font-face {
+ font-family: 'JetBrains Mono';
+ src: local('JetBrains Mono'), url('/blog/font/JetBrainsMono-Regular.woff2') format('woff2');
+}</style><meta name="generator" content="Hexo 6.1.0"></head><body style="background-image:url(https://ak.hypergryph.com/assets/index/images/ak/pc/bk.jpg);"><div id="cursor-container"><div id="cursor-outer"></div><div id="cursor-effect"></div></div><main><header><nav><div class="navBtn"><i class="navBtnIcon"><span class="navBtnIconBar"></span><span class="navBtnIconBar"></span><span class="navBtnIconBar"></span></i></div><ol class="navContent"><li class="navItem search-header"><input autocomplete="off" autocorrect="off" autocapitalize="none" placeholder="数据检索" spellcheck="false" maxlength="50" type="text" id="search-input"></li><li class="navItem"><a href="/blog/"><span class="navItemTitle">Home</span></a></li><li class="navItem"><a href="/blog/archives/"><span class="navItemTitle">Archives</span></a></li></ol></nav><div class="search-popup"><div id="search-result"></div></div></header><article><div id="post-bg"><div id="post-title"><h1>为什么使用在齐次坐标下矩阵乘法能表示点平移？</h1><div id="post-info"><span>First Post:<span class="control"><time datetime="2022-07-31T07:35:17.000Z" id="date"> 2022-07-31</time></span></span><br><span>Last Update:<span class="control"><time datetime="2022-08-04T18:27:34.000Z" id="updated"> 2022-08-05</time></span></span></div></div><hr><div id="post-content"><h2 id="首先，什么是线性变换？"><a href="#首先，什么是线性变换？" class="headerlink" title="首先，什么是线性变换？"></a>首先，什么是线性变换？</h2><p>简化了一万倍来说，线性变换主要是在描述符合这两种性质的变换：一是要可加，二是要能数乘。<br>也就是说，对于空间中所有向量 <script type="math/tex">\vec{v_1}, \vec{v_2}</script> ，以及任意数量 <script type="math/tex">k_1, k_2</script> ，如果有：</p>
+<script type="math/tex; mode=display">
+A(k_1 \vec{v_1} + k_2 \vec{v_2}) = k_1 A(\vec{v_1}) + k_2 A(\vec{v_2})</script><p>符合这种规律的 A 就叫线性变换。而一次矩阵乘法正好可以代表一次线性变换。</p>
+<p>为什么叫“线性”变换呢？感性地来说，因为它很“线”。</p>
+<p>我们可以直观地从下面这张图看出原因：</p>
+<p><img src="OnOneLineWillStillOneLine_ManimCE_v0.16.0.post0.gif" alt=""><br>我们可以看到，在同一直线上的点，经过同一线性变换后还在同一直线上。所以它很“线”。</p>
+<p>另一方面，我们可以找一找最简单的线性变换：</p>
+<p>考虑函数：</p>
+<script type="math/tex; mode=display">
+f(x) = k_0 x</script><p>我们都知道这是一条过原点的直线。</p>
+<p>而从另一方面想，其实这个函数对于任意一维向量（实数） <script type="math/tex">x_1, x_2</script> , 与任意数量（实数） <script type="math/tex">k_1, k_2</script> , 都有：</p>
+<script type="math/tex; mode=display">
+f(k_1 x_1 + k_2 x_2) = k_1 k_0 x_1 + k_2 k_0 x_2 = k_1 f(x_1) + k_2 f(x_2) \\</script><p>即， xy 平面上过原点的直线（正比例函数）本身就是一种从 x 轴到 y 轴的线性变换。</p>
+<p>关于线性变换， <a target="_blank" rel="noopener" href="https://www.3blue1brown.com/topics/linear-algebra">3blue1Brown</a> 上有更详细更感性的介绍，大家感兴趣可以前往观看。</p>
+<h2 id="为什么普通的线性变换不能表示点平移？"><a href="#为什么普通的线性变换不能表示点平移？" class="headerlink" title="为什么普通的线性变换不能表示点平移？"></a>为什么普通的线性变换不能表示点平移？</h2><p>从上面的感性介绍来看，我们知道线性变换的性质就是可加和数乘，写成等式就是：</p>
+<script type="math/tex; mode=display">
+A(k_1 \vec{v_1} + k_2 \vec{v_2}) = k_1 A(\vec{v_1}) + k_2 A(\vec{v_2})</script><p>而当两个向量都为零向量时，等式就会简化成：</p>
+<script type="math/tex; mode=display">
+A(\vec{0}) = A(\vec{0}) + A(\vec{0})</script><p>解一下方程，就可以知道，对任意线性变换 A，都会有：</p>
+<script type="math/tex; mode=display">
+A(\vec{0}) = 0</script><p>也就是说，不管是哪个线性变换 A ，原点经过变换后都必须只能是在原点不变。如果变换后原点的位置变了，那它就一定不是线性变换。</p>
+<p>我们从下图也可以看出，对于切变 <script type="math/tex">\begin{pmatrix}1 & 1 \\ 0 & 1\end{pmatrix}</script> 、伸缩 <script type="math/tex">\begin{pmatrix}2 & 0 \\ 0 & \frac{1}{2}\end{pmatrix}</script>、旋转 <script type="math/tex">\begin{pmatrix}
+    \frac{\sqrt{3}}{2} & -\frac{1}{2} \\ \frac{1}{2} & \frac{\sqrt{3}}{2}
+\end{pmatrix}</script> 这些经典的线性变换，变换后原点都不会变。</p>
+<p><img src="SliceScaleRotateForOrigin_ManimCE_v0.16.0.post0.gif" alt=""></p>
+<p>但是平移这种变换不一样。原点经过平移后，是一定不会还留在原点的。因此平移不是一种线性变换，自然也不能用矩阵来表示。</p>
+<h2 id="为什么基于齐次坐标下的线性变换就可以表示平移？"><a href="#为什么基于齐次坐标下的线性变换就可以表示平移？" class="headerlink" title="为什么基于齐次坐标下的线性变换就可以表示平移？"></a>为什么基于齐次坐标下的线性变换就可以表示平移？</h2><p>我们先来看一下齐次坐标做了些什么。</p>
+<p>在上面传统的线性变换中，我们不会考虑向量与点的区别。一个二维坐标 <script type="math/tex">(x, y)</script> 既能代表那个坐标上的点，也能代表从原点到 <script type="math/tex">(x, y)</script> 的向量。这时，点与向量是一一对应的。</p>
+<p>但如果要考虑平移，点与向量就不能再一一对应了，因为对向量平移没有意义（不考虑物理中力矩的场景）。<br>所以在齐次坐标下，我们需要区分这个坐标代表的是点还是向量。</p>
+<p>以二维空间为例，齐次坐标就是在二维空间上加了第三个维度 w 轴，二维空间里的点在 w 轴上的值为 1 ，而二维向量在 w 轴上的值对应为 0 ：</p>
+<script type="math/tex; mode=display">
+\begin{align}
+    P &= \begin{pmatrix}x & y & 1\end{pmatrix} \\
+    \vec{v} &= \begin{pmatrix}v_x & v_y & 0\end{pmatrix}
+\end{align}</script><p>从字面上看可能还是不太明显，让我们试着把二维空间齐次坐标强行转化为三维空间坐标看看：</p>
+<p><img src="HomogeneousTransform_ManimCE_v0.16.0.post0.gif" alt=""></p>
+<p>我们发现，原来二维空间中的点，被投射到三维空间中 w = 1 的平面上了！</p>
+<p>这样一来，二维空间齐次坐标下的平移矩阵也很好理解了：</p>
+<script type="math/tex; mode=display">
+将平面沿向量 (x, y) 平移：
+\begin{pmatrix}
+    1 & 0 & x \\
+    0 & 1 & y \\
+    0 & 0 & 1
+\end{pmatrix}</script><p>这不就是三维空间中在 w 轴上做切变时的变换矩阵嘛！</p>
+<p>我们可以重点关注一下 <script type="math/tex">\begin{pmatrix}0\\0\\1\end{pmatrix}</script> 这个向量。<br>从齐次坐标的定义来看，这个向量对应着二维空间中的原点 <script type="math/tex">P_{Origin} = \begin{pmatrix} 0 \\ 0 \end{pmatrix}</script> 。而由矩阵乘法计算可知，经过 <script type="math/tex">A = \begin{pmatrix} 1 & 0 & x \\ 0 & 1 & y \\ 0 & 0 & 1 \end{pmatrix}</script> 对应的线性变换后， <script type="math/tex">\begin{pmatrix}0\\0\\1\end{pmatrix}</script> 这个向量会被映射到 <script type="math/tex">\begin{pmatrix}x\\y\\1\end{pmatrix}</script> 上。也就是说，二维空间原点 <script type="math/tex">P_{Origin} = \begin{pmatrix}0\\0\end{pmatrix}</script> 经过变换后会变为 <script type="math/tex">P_{Origin}' = A(P_{Origin}) = \begin{pmatrix}x\\y\end{pmatrix}</script> 。</p>
+<p>而对于二维空间中的向量 <script type="math/tex">\vec{v}=\begin{pmatrix}v_x\\v_y\end{pmatrix}</script> ，其齐次坐标下 w 轴方向分量为 0 ，因此 w 轴方向上的切变并不会影响二维空间中的向量。即 <script type="math/tex">\vec{v'} = A(\vec{v}) = \vec{v}</script> 。</p>
+<p>而对于原来二维空间中的其他点的坐标：</p>
+<script type="math/tex; mode=display">
+P = \begin{pmatrix}x_0\\y_0\end{pmatrix}</script><p>其实可以理解为原点坐标再加上一个偏移向量：</p>
+<script type="math/tex; mode=display">
+P = \begin{pmatrix}0\\0\end{pmatrix} + \begin{pmatrix}x_0\\y_0\end{pmatrix} = P_{Origin} + \vec{v}_{x,y}</script><p>而在齐次坐标下，点坐标 = 原点坐标 + 偏移向量 这一等式仍然成立：</p>
+<script type="math/tex; mode=display">
+P =  \begin{pmatrix}x_0\\y_0\\1\end{pmatrix} = \begin{pmatrix}0\\0\\1\end{pmatrix} + \begin{pmatrix}x_0\\y_0\\0\end{pmatrix} = P_{Origin} + \vec{v}_{x,y}</script><p>而由于切变是线性变换，因此有：</p>
+<script type="math/tex; mode=display">
+\begin{align}
+P' &= A(P) \\
+&= A(P_{Origin} + \vec{v}_{x,y}) \\
+&= A(P_{Origin}) + A(\vec{v}_{x,y}) \\
+&= P_{Origin}' + \vec{v}_{x,y} \\
+\end{align}</script><p>因为切变前后偏移向量没有发生变化，因此二维空间上的点经变换后相对于原点的方向、距离都没有发生变化。由此也可得出，原先由二维空间中的点组成的图案，经齐次坐标下 w 轴的切变后，其大小、形状、方向都不会发生变化。</p>
+<p><img src="SliceOnHomogeneousWithGraph_ManimCE_v0.16.0.post0.gif" alt=""></p>
+<p>而这种大小、形状、方向都不变化，只有整体位置发生了变化的变换，正是我们一般所说的“平移”。因此在齐次坐标下，我们能通过线性变换（aka 矩阵乘法）表示平移。</p>
+<blockquote>
+<p>其实 <script type="math/tex">\begin{pmatrix}1 & 0 & x \\0 & 1 & y \\0 & 0 & 1\end{pmatrix}</script> 对应切变作用后各点坐标如何变化这个过程， 3Blue1Brown 的<a target="_blank" rel="noopener" href="https://www.3blue1brown.com/lessons/matrix-multiplication">这个视频</a> 有更直观明了的解释，大家可以参考。</p>
+</blockquote>
+<h2 id="总结一下"><a href="#总结一下" class="headerlink" title="总结一下"></a>总结一下</h2><p>Q: 为什么普通的矩阵乘法不能表示平移？<br>A: 因为矩阵乘法只能表示线性变换。平移不是线性变换。</p>
+<p>Q: 为什么在齐次坐标下的矩阵乘法又能表示平移？<br>A: 因为齐次坐标增加了一个维度。平移变换矩阵其实是在新增的这个维度上做切变（一种线性变换）。切变后的结果正好就是原坐标中的平移变换。</p>
+<div id="paginator"></div></div><div id="post-footer"><div id="pages"><div id="footer-link" style="left: 50%;order: 0;border-left: 1px solid #fe2;padding-right: unset;max-width: calc(50% - 5px);"><a href="/blog/2022/06/27/2022-06-28-graph-for-economics-1/">图解经济学原理(1) Prev →</a></div></div></div></div><div id="bottom-btn"><a id="to-top" onClick="index.scrolltop();" title="to top" style="opacity: 0; display: none;">∧</a></div></article><div class="aside-box"><aside><div id="aside-top"><div id="about"><a href="/blog/" id="logo"><img src="https://ak.hypergryph.com/assets/index/images/ak/pc/faction/1.png" alt="Logo"></a><h1 id="Dr"><a href="/">Ryo Jerry Yu</a></h1><div id="description"><p>记录一些小事情。</p></div><!--if page.published === undefined--><section id="total"><a id="total-archives" href="/blog/archives"><span class="total-title">Archives Total:</span><span class="total-number">12</span></a><div id="total-tags"><span class="total-title">Tags:</span><span class="total-number">19</span></div><div id="total-categories"><span class="total-title">Categories:</span><span class="total-number">0</span></div></section></div><div id="aside-block"><div id="toc-div"><h1>INDEX</h1><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A6%96%E5%85%88%EF%BC%8C%E4%BB%80%E4%B9%88%E6%98%AF%E7%BA%BF%E6%80%A7%E5%8F%98%E6%8D%A2%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">首先，什么是线性变换？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%99%AE%E9%80%9A%E7%9A%84%E7%BA%BF%E6%80%A7%E5%8F%98%E6%8D%A2%E4%B8%8D%E8%83%BD%E8%A1%A8%E7%A4%BA%E7%82%B9%E5%B9%B3%E7%A7%BB%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">为什么普通的线性变换不能表示点平移？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%9F%BA%E4%BA%8E%E9%BD%90%E6%AC%A1%E5%9D%90%E6%A0%87%E4%B8%8B%E7%9A%84%E7%BA%BF%E6%80%A7%E5%8F%98%E6%8D%A2%E5%B0%B1%E5%8F%AF%E4%BB%A5%E8%A1%A8%E7%A4%BA%E5%B9%B3%E7%A7%BB%EF%BC%9F"><span class="toc-number">3.</span> <span class="toc-text">为什么基于齐次坐标下的线性变换就可以表示平移？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%E4%B8%80%E4%B8%8B"><span class="toc-number">4.</span> <span class="toc-text">总结一下</span></a></li></ol></div></div></div><footer><nobr><span class="text-title">©</span><span class="text-content"></span></nobr><br><nobr><span class="text-title">ICP</span><span class="text-content"></span></nobr><br><text>published with <a target="_blank" rel="noopener" href="http://hexo.io">Hexo</a></text><text> Theme <a target="_blank" rel="noopener" href="https://github.com/Yue-plus/hexo-theme-arknights">Arknight</a></text><wbr><text>by <a target="_blank" rel="noopener" href="https://github.com/Yue-plus">Yue_plus</a></text></footer></aside></div></main><canvas id="canvas-dust"></canvas><script src="/js/search.js"></script><script>const reset=_=>{mermaid.init(undefined, ('.mermaid'));}</script><script src="//unpkg.com/@highlightjs/cdn-assets@11.4.0/highlight.min.js"></script><script src="/blog/js/arknights.js"></script><script>document.addEventListener("load",reset())</script></body></html>
