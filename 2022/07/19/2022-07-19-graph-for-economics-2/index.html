@@ -1,0 +1,126 @@
+<!DOCTYPE html><html lang="[&quot;zh&quot;,&quot;jp&quot;,&quot;default&quot;]"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>图解经济学原理(2) | Ryo's Blog</title><script>var config = {"hostname":"https://ryojerryyu.github.io/blog","root":"/blog/","preload":false,"path":""}</script><script src="//unpkg.com/mermaid@8.13.3/dist/mermaid.min.js"></script><script>mermaid.initialize({
+  startOnLoad: false
+  , theme: 'dark'
+});</script><script src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.6.1/MathJax.js"></script><script>MathJax.Hub.Config({
+  menuSettings: {
+    zoom: "None"
+  },
+  showMathMenu: false,
+  jax: ["input/TeX","output/CommonHTML"],
+  extensions: ["tex2jax.js"],
+  TeX: {
+    extensions: ["AMSmath.js","AMSsymbols.js"],
+    equationNumbers: {
+      autoNumber: "AMS"
+    }
+  },
+  tex2jax: {
+    inlineMath: [["\\(", "\\)"]],
+    displayMath: [["\\[", "\\]"]]
+  }
+});</script><link rel="stylesheet" href="/blog/css/arknights.css"><link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.4.0/styles/atom-one-dark-reasonable.min.css"><style>@font-face {
+ font-family: BenderLight;
+ src: local('Bender'), url("/blog/font/BenderLight.ttf");
+}
+@font-face {
+ font-family: 'JetBrains Mono';
+ src: local('JetBrains Mono'), url('/blog/font/JetBrainsMono-Regular.woff2') format('woff2');
+}</style><meta name="generator" content="Hexo 6.1.0"></head><body style="background-image:url(https://ak.hypergryph.com/assets/index/images/ak/pc/bk.jpg);"><div id="cursor-container"><div id="cursor-outer"></div><div id="cursor-effect"></div></div><main><header><nav><div class="navBtn"><i class="navBtnIcon"><span class="navBtnIconBar"></span><span class="navBtnIconBar"></span><span class="navBtnIconBar"></span></i></div><ol class="navContent"><li class="navItem search-header"><input autocomplete="off" autocorrect="off" autocapitalize="none" placeholder="数据检索" spellcheck="false" maxlength="50" type="text" id="search-input"></li><li class="navItem"><a href="/blog/"><span class="navItemTitle">Home</span></a></li><li class="navItem"><a href="/blog/archives/"><span class="navItemTitle">Archives</span></a></li></ol></nav><div class="search-popup"><div id="search-result"></div></div></header><article><div id="post-bg"><div id="post-title"><h1>图解经济学原理(2)</h1><div id="post-info"><span>First Post:<span class="control"><time datetime="2022-07-19T15:12:48.000Z" id="date"> 2022-07-19</time></span></span><br><span>Last Update:<span class="control"><time datetime="2022-07-31T07:25:32.000Z" id="updated"> 2022-07-31</time></span></span></div></div><hr><div id="post-content"><blockquote>
+<ol>
+<li>这篇文章参考了曼昆的《经济学原理》与北京大学王辉老师的《微观经济学》课程，内容上会有部分相似。</li>
+<li>这篇文章中的图使用 3Blue1Brown 的动画生成工具 manim 的 Community Edition 制作，源代码之后会上传到 GitHub 。</li>
+</ol>
+</blockquote>
+<p>上一篇讲供给，这一篇讲需求。<br>其实供给与需求有很多相似的地方，有时只需要套一下上一篇中给出的模型就能求解。因此各位如果还没有看过上一篇，可以先看完再回来看这一篇内容也不迟。</p>
+<p>讲需求曲线的时候，我们会先假设消费者是一个理性人，做决策时会将成本与收益作比较。比如在买冰酒这个场景，我们就会比较冰酒的价格与我们喝冰酒爽到的满足感（意愿支付价格），如果冰酒价格低于意愿支付价格我们就会去买这瓶冰酒。</p>
+<p>而假如我们是葡萄庄园主，我们当然也会去比较各种收益与成本，来决定是否制作冰酒拿出去卖。</p>
+<p>当我们选择制作冰酒拿出去卖，那收益自然就是卖冰酒所能拿到的钱，也就是冰酒的价格。</p>
+<p>但选择制作冰酒拿出去卖的成本呢？</p>
+<h1 id="机会成本"><a href="#机会成本" class="headerlink" title="机会成本"></a>机会成本</h1><p>有一般会计常识的人可能会很快答出：成本不就是买种子、种葡萄、酿酒等过程中花掉的钱嘛！</p>
+<p>但实际上问题没有这么简单。因为我们的决策是“制作冰酒拿出去卖”，所以我们必须计算做出决策和不做出决策两种情况之间的差别。<br>如果决定不制作冰酒拿出去卖，那我们可以省下一大笔时间与资金。我们可以拿着这些时间与资金去做其他事情，比如可以去种西瓜卖，可以去投资，甚至可以去打工当码农。这些活动都可以获得收益。<br>而如果决定去制作冰酒拿出去卖，就代表你为了获得卖冰酒的收益，要选择放弃上面这些活动中获得的收益。“放弃获得这些收益的机会”也是你卖冰酒的成本。</p>
+<p>为了与常识中所说的成本做区别，我们把这种算上放弃收益机会的成本称为<strong>机会成本</strong>。经济学中常说的成本的也是机会成本。</p>
+<blockquote>
+<p><strong>机会成本</strong>（ Opportunity cost ）：是指为了得到某种东西所必须放弃的东西。 _ 曼昆《经济学原理：微观经济学分册》：Page 52</p>
+</blockquote>
+<h2 id="生产者的理性人决策模型"><a href="#生产者的理性人决策模型" class="headerlink" title="生产者的理性人决策模型"></a>生产者的理性人决策模型</h2><p>还记得理性人决策的模型吗？不记得的话可以先看看上一篇。<br>引入了机会成本这一概念，我们套模型的三个要素就都准备好了：</p>
+<ul>
+<li>做决策 = 生产冰酒拿出去卖</li>
+<li>收益 = 冰酒价格（卖冰酒拿到的钱）</li>
+<li>成本 = 机会成本</li>
+</ul>
+<p>那么我们就有：</p>
+<ul>
+<li>if 冰酒价格 &gt; 机会成本 : 生产冰酒拿出去卖</li>
+<li>if 冰酒价格 &lt; 机会成本 : 不生产冰酒</li>
+</ul>
+<p>[[图片：机会成本柱，价格线，线高于柱做决策，线低于柱不做决策]]</p>
+<p>假设我们是葡萄庄园主，而且已经能预知冰酒市场价稳定在每瓶 50 元。如果我们荒废掉庄园拿钱去投资，就算减去掉投资风险，赚的钱都比卖冰酒赚的钱多得多，那我们就会毫不犹豫地荒废掉庄园选择躺着赚钱。这种其实就是机会成本高于交易收益的情况。</p>
+<h2 id="生产者剩余"><a href="#生产者剩余" class="headerlink" title="生产者剩余"></a>生产者剩余</h2><p>如果收益高于机会成本，那我们就会毫不犹豫地选择生产冰酒拿出去卖。为啥？因为能赚钱呀！赚钱嘛，不寒掺。</p>
+<p>“赚钱”，可能就是生产者剩余最贴切地解释了。因为卖冰酒获得的收益（冰酒价格），比制作冰酒的成本（制作冰酒所放弃的其他收益加上制作冰酒耗费的金钱，也就是机会成本）更多，我们称在卖出冰酒的过程中我们获得了生产者剩余。</p>
+<blockquote>
+<p><strong>生产者剩余</strong>（ producer surplus ）：卖者出售一种商品得到的量减去其生产成本。Page 140</p>
+</blockquote>
+<p>与消费者剩余类似，生产者剩余计算上表示为：</p>
+<script type="math/tex; mode=display">
+生产者剩余 = 卖出商品得到的量 - 卖出商品所支付的金钱</script><p>表示为图的话就是商品价格与成本之间的部分：<br>[[图片：生产者剩余柱，价格线，线与柱之间的部分]]</p>
+<h2 id="供给曲线"><a href="#供给曲线" class="headerlink" title="供给曲线"></a>供给曲线</h2><p>与上一篇里消费者情况类似，市场中的生产者也不会只有我们一个。我们把市场中（可能）卖冰酒的人全部抓过来审问一遍，统计一下他们卖冰酒的机会成本，从低到高排个序后就得到下面的图：</p>
+<p>[[图：机会成本柱状图，从低到高连成曲线，冰酒价格横线，线高于柱做决策，线低于柱不做决策]]</p>
+<p>与上一篇需求曲线过程类似，把各人机会成本连成曲线，我们就得到了冰酒市场中的供给曲线。</p>
+<p>供给曲线与冰酒价格交点的左边，由于这些生产者机会成本小于商品价格，能获得生产者剩余，他们就会选择制作并卖出冰酒（进入市场）。假设他们全部都能卖出冰酒，那他们卖出冰酒的量就是并就的交易量，他们的生产者剩余总和，也就是需求曲线以上价格线以下的部分，就是冰酒市场中总的生产者剩余。</p>
+<p>[[图：需求曲线与价格的交点，纵坐标横坐标解释，价格变动后，纵坐标与横坐标变化解释，交点连续变为曲线]]</p>
+<p>与上一篇同理，由于机会成本比较高，处于供给曲线与价格线交点右方的那些人不会选择制作冰酒，因此他们并不会在冰酒市场获得或失去生产者剩余。</p>
+<h1 id="均衡"><a href="#均衡" class="headerlink" title="均衡"></a>均衡</h1><p>上面分析供给曲线，包括上一篇中分析需求曲线时，我们都是先假设先有一个价格，然后再分析如果价格高了会怎么样，如果价格低了会怎么样。</p>
+<p>可是这个价格是谁来定的？</p>
+<h2 id="完全竞争市场"><a href="#完全竞争市场" class="headerlink" title="完全竞争市场"></a>完全竞争市场</h2><p>为了分析这个问题，我们需要引入除理性人假设外第二个假设：完全竞争市场假设：</p>
+<p>我们假设市场是完全竞争的，这样的市场必须具有三个特征：</p>
+<ol>
+<li>消费者能自由选择购买任一生产者的商品</li>
+<li>市场中的商品都是完全相同的</li>
+<li>买卖双方都人数众多</li>
+</ol>
+<p>在这种假设下，市场中所有商品价格都相等，且没有任何一个消费者或生产者能够影响市场价格。因为如果有一个生产者的商品价格高于市场价，消费者们就会到别的地方购买；而由于他们都是理性人，没有生产者会打算以低于市场价的价格出售商品。消费者角度也同理：没有理由用高价买商品，而低价将买不到商品。</p>
+<p>这时，我们就可以把需求曲线与供给曲线放在一起分析，由于完全竞争市场中：</p>
+<script type="math/tex; mode=display">
+任意消费者购买商品的价格 = 任意生产者出售商品的价格</script><p>因此市场中商品价格是固定值，是水平于供给量/需求量的横线。<br>[[图：需求曲线与供给曲线，价格横线只有一条，高于交点时与低于交点时]]</p>
+<p>另外，我们看到供给曲线与需求曲线之间有一个交点。接下来我们就要针对这个交点，解决完全竞争市场中价格由谁来定的问题。</p>
+<h2 id="市场趋向于均衡"><a href="#市场趋向于均衡" class="headerlink" title="市场趋向于均衡"></a>市场趋向于均衡</h2><p>首先我们考虑如果价格高于交点时的情况。</p>
+<p>前面我们说过，只有价格线与需求曲线交点左边的消费者会购买商品，而只有价格线与供给曲线交点左边的生产者会生产并出售商品。因此我们可以直观地知道，这时商品供给量比需求量要多。那多出来的那一部分商品一定会卖不出去。</p>
+<p>卖不出去咋办呀？那就只能降价。<br>之前我们说完全竞争市场中生产者没有低价出售商品的理由，那是建立在商品都能卖出去前提下的。商品都能卖出去时没有道理自损利益，但现在商品卖不出去就只能降价吸引客流了。（其实提升商品质量也增加售出量是一种好方法，但我们这里假设了是完全竞争市场，所有商品都完全相同）</p>
+<p>消费者们也都是理性人，既然商品完全相同，自然就会选择购买更低价的商品。原本还凑合着能卖出去的那部分商品反而因为未降价变得卖不出去了，自然他们也会选择降价，最终市场中商品的价格整体降低。</p>
+<p>市场价降低，使得一部分生产者的机会成本高过了收益，这一部分生产者就会选择离开，使得供给量下降。另一方面，降价使得价格低过了一部分潜在消费者的意愿支付价格，这一部分人就会选择购买商品，使得需求量上升。</p>
+<p>[[图：均衡P81(Eng P77)，价格高于均衡的情况]]</p>
+<p>而另一种情况，也相类似。如果价格低于交点，市场中商品的需求量就会大于供给量。这时必然会有一部分人想买但是买不到商品，他们就会逐渐选择用更高的价格来购买，最终拉高整个市场中的商品价格。市场价升高，使得供给量上升，需求量下降。</p>
+<p>[[图：价格低于均衡的情况]]</p>
+<p>价格高于交点时会趋于降价，而价格低于交点时会趋于涨价。在充分选择的情况下，最终市场价会等于交点处商品价格。这时市场达到均衡，生产者生产出的所有商品都能卖出，所有消费者都能购买到他们所需的商品。</p>
+<h2 id="市场效率与福利"><a href="#市场效率与福利" class="headerlink" title="市场效率与福利"></a>市场效率与福利</h2><p>之前我们提过消费者剩余与生产者剩余的概念。</p>
+<p>消费者剩余 = 意愿支付价格 - 商品价格，如果一个消费者在一场交易中消费者剩余越大，他就感觉越赚，他就对这场交易越满意。对于市场中所有消费者都是如此，因此市场中所有的消费者剩余，也就是需求曲线以下价格线以上的面积，代表了市场中所有消费者对市场交易的满意度。</p>
+<p>同样的，生产者剩余 = 商品价格 - 机会成本。市场中所有的生产者剩余，就是价格曲线以下供给曲线以上的部分，代表了市场中所有生产者对市场交易的满意度。</p>
+<p>因此，市场中总的生产者剩余加上总的消费者剩余，代表了市场中所有人对市场交易的满意度。我们称这就是市场中的总剩余。</p>
+<p>在市场均衡情况下，我们很容易地就能知道总剩余是多少。由于市场均衡时市场中所有的生产者与所有的消费者都能达成交易，而交易价格就是均衡价格。因此我们很容易地就能在图中找到代表生产者剩余、消费者剩余与总剩余的面积。</p>
+<p>[[图]]</p>
+<p>而如果市场没有达到均衡，会出现有的消费者没能买到商品、或是生产者的商品没能卖出去的情况。这些时候，没能买到商品的消费者与没能卖出商品的生产者自然不会对交易满意（因为没能达成交易），自然也不计算剩余。而市场中商品的交易量取决于需求量与供给量中更小的一方。无论如何，总剩余总会小于均衡时的总剩余。</p>
+<p>[[图]]</p>
+<p>由此可以看出，只有当市场达到均衡的时候，加入市场的所有人对市场交易的满意度最大。而市场均衡是完全竞争的自由市场中会自发达到的状态。</p>
+<p>因此，从经济学的观点来看，在所有人都是理性人、市场是完全竞争市场的假设下，不需要任何外加的制度或政策，市场就会自发地达到人们满意度最高的状态。也正因如此，亚当·斯密才会说市场是一个看不见的手。</p>
+<h1 id="总结一下"><a href="#总结一下" class="headerlink" title="总结一下"></a>总结一下</h1><p>needed:</p>
+<ul>
+<li>[ ] svg character</li>
+<li>[ ] bar graph</li>
+<li>[ ] function graph</li>
+<li>[ ] manim command for output path and input path <a target="_blank" rel="noopener" href="https://docs.manim.community/en/stable/tutorials/configuration.html">https://docs.manim.community/en/stable/tutorials/configuration.html</a></li>
+<li>[ ] want mp4 as picture</li>
+<li>[ ] interactive manim <a target="_blank" rel="noopener" href="https://github.com/3b1b/3Blue1Brown.com/tree/main/public/content/lessons/2021/newtons-fractal">https://github.com/3b1b/3Blue1Brown.com/tree/main/public/content/lessons/2021/newtons-fractal</a></li>
+</ul>
+<h1 id="税收，污染权与外部性，国际贸易"><a href="#税收，污染权与外部性，国际贸易" class="headerlink" title="税收，污染权与外部性，国际贸易"></a>税收，污染权与外部性，国际贸易</h1><p>※</p>
+<h1 id="比较优势"><a href="#比较优势" class="headerlink" title="比较优势"></a>比较优势</h1><h1 id="弹性与均衡移动，收益分析"><a href="#弹性与均衡移动，收益分析" class="headerlink" title="弹性与均衡移动，收益分析"></a>弹性与均衡移动，收益分析</h1><h1 id="生产成本，垄断，寡头"><a href="#生产成本，垄断，寡头" class="headerlink" title="生产成本，垄断，寡头"></a>生产成本，垄断，寡头</h1><h1 id="生产要素市场"><a href="#生产要素市场" class="headerlink" title="生产要素市场"></a>生产要素市场</h1><p>宏观：<br>重点：</p>
+<ol>
+<li>三个指标：GDP，价格水平，就业 =》 促使政府调节经济</li>
+<li>两种政策：<ol>
+<li>货币政策 =》 名义利率，量化宽松，前瞻指引，汇率决定制度等</li>
+<li>财政政策 =》 加息、采购</li>
+</ol>
+</li>
+<li>两种政策对经济影响（总供给总需求模型），以及国际经济与贸易影响</li>
+</ol>
+<h1 id="三个指标与两种政策"><a href="#三个指标与两种政策" class="headerlink" title="三个指标与两种政策"></a>三个指标与两种政策</h1><h2 id="三个指标"><a href="#三个指标" class="headerlink" title="三个指标"></a>三个指标</h2><h2 id="经济增长的原因-——-全要素生产率"><a href="#经济增长的原因-——-全要素生产率" class="headerlink" title="经济增长的原因 —— 全要素生产率"></a>经济增长的原因 —— 全要素生产率</h2><h2 id="经济波动"><a href="#经济波动" class="headerlink" title="经济波动"></a>经济波动</h2><h2 id="凯恩斯主义-——-促进政府调节经济"><a href="#凯恩斯主义-——-促进政府调节经济" class="headerlink" title="凯恩斯主义 —— 促进政府调节经济"></a>凯恩斯主义 —— 促进政府调节经济</h2><h2 id="调节经济两种政策"><a href="#调节经济两种政策" class="headerlink" title="调节经济两种政策"></a>调节经济两种政策</h2><h1 id="财政政策"><a href="#财政政策" class="headerlink" title="财政政策"></a>财政政策</h1><h1 id="货币政策"><a href="#货币政策" class="headerlink" title="货币政策"></a>货币政策</h1><h2 id="两种政策对经济影响-——-总供给总需求模型"><a href="#两种政策对经济影响-——-总供给总需求模型" class="headerlink" title="两种政策对经济影响 —— 总供给总需求模型"></a>两种政策对经济影响 —— 总供给总需求模型</h2><h2 id="国际经济"><a href="#国际经济" class="headerlink" title="国际经济"></a>国际经济</h2><p><a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>.</p>
+<div id="paginator"></div></div><div id="post-footer"><div id="pages"><div id="footer-link" style="right: calc(50% - 1px);order: 1;border-right: 1px solid #fe2;padding-left: unset;max-width: calc(50% - 4px);"><a href="/blog/2022/07/31/2022-07-31-why-homogeneous/">← Next 为什么使用在齐次坐标下矩阵乘法能表示点平移？</a></div><div id="footer-link" style="left: 50%;order: 0;border-left: 1px solid #fe2;padding-right: unset;max-width: calc(50% - 5px);"><a href="/blog/2022/06/27/2022-06-28-graph-for-economics-1/">图解经济学原理(1) Prev →</a></div></div></div></div><div id="bottom-btn"><a id="to-top" onClick="index.scrolltop();" title="to top" style="opacity: 0; display: none;">∧</a></div></article><div class="aside-box"><aside><div id="aside-top"><div id="about"><a href="/blog/" id="logo"><img src="https://ak.hypergryph.com/assets/index/images/ak/pc/faction/1.png" alt="Logo"></a><h1 id="Dr"><a href="/">Ryo Jerry Yu</a></h1><div id="description"><p>记录一些小事情。</p></div><!--if page.published === undefined--><section id="total"><a id="total-archives" href="/blog/archives"><span class="total-title">Archives Total:</span><span class="total-number">13</span></a><div id="total-tags"><span class="total-title">Tags:</span><span class="total-number">19</span></div><div id="total-categories"><span class="total-title">Categories:</span><span class="total-number">0</span></div></section></div><div id="aside-block"><div id="toc-div"><h1>INDEX</h1><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9C%BA%E4%BC%9A%E6%88%90%E6%9C%AC"><span class="toc-number">1.</span> <span class="toc-text">机会成本</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E4%BA%A7%E8%80%85%E7%9A%84%E7%90%86%E6%80%A7%E4%BA%BA%E5%86%B3%E7%AD%96%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.1.</span> <span class="toc-text">生产者的理性人决策模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E4%BA%A7%E8%80%85%E5%89%A9%E4%BD%99"><span class="toc-number">1.2.</span> <span class="toc-text">生产者剩余</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BE%9B%E7%BB%99%E6%9B%B2%E7%BA%BF"><span class="toc-number">1.3.</span> <span class="toc-text">供给曲线</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9D%87%E8%A1%A1"><span class="toc-number">2.</span> <span class="toc-text">均衡</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%8C%E5%85%A8%E7%AB%9E%E4%BA%89%E5%B8%82%E5%9C%BA"><span class="toc-number">2.1.</span> <span class="toc-text">完全竞争市场</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%82%E5%9C%BA%E8%B6%8B%E5%90%91%E4%BA%8E%E5%9D%87%E8%A1%A1"><span class="toc-number">2.2.</span> <span class="toc-text">市场趋向于均衡</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%82%E5%9C%BA%E6%95%88%E7%8E%87%E4%B8%8E%E7%A6%8F%E5%88%A9"><span class="toc-number">2.3.</span> <span class="toc-text">市场效率与福利</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%E4%B8%80%E4%B8%8B"><span class="toc-number">3.</span> <span class="toc-text">总结一下</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%A8%8E%E6%94%B6%EF%BC%8C%E6%B1%A1%E6%9F%93%E6%9D%83%E4%B8%8E%E5%A4%96%E9%83%A8%E6%80%A7%EF%BC%8C%E5%9B%BD%E9%99%85%E8%B4%B8%E6%98%93"><span class="toc-number">4.</span> <span class="toc-text">税收，污染权与外部性，国际贸易</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%AF%94%E8%BE%83%E4%BC%98%E5%8A%BF"><span class="toc-number">5.</span> <span class="toc-text">比较优势</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%B9%E6%80%A7%E4%B8%8E%E5%9D%87%E8%A1%A1%E7%A7%BB%E5%8A%A8%EF%BC%8C%E6%94%B6%E7%9B%8A%E5%88%86%E6%9E%90"><span class="toc-number">6.</span> <span class="toc-text">弹性与均衡移动，收益分析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%94%9F%E4%BA%A7%E6%88%90%E6%9C%AC%EF%BC%8C%E5%9E%84%E6%96%AD%EF%BC%8C%E5%AF%A1%E5%A4%B4"><span class="toc-number">7.</span> <span class="toc-text">生产成本，垄断，寡头</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%94%9F%E4%BA%A7%E8%A6%81%E7%B4%A0%E5%B8%82%E5%9C%BA"><span class="toc-number">8.</span> <span class="toc-text">生产要素市场</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E4%B8%AA%E6%8C%87%E6%A0%87%E4%B8%8E%E4%B8%A4%E7%A7%8D%E6%94%BF%E7%AD%96"><span class="toc-number">9.</span> <span class="toc-text">三个指标与两种政策</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E4%B8%AA%E6%8C%87%E6%A0%87"><span class="toc-number">9.1.</span> <span class="toc-text">三个指标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%8F%E6%B5%8E%E5%A2%9E%E9%95%BF%E7%9A%84%E5%8E%9F%E5%9B%A0-%E2%80%94%E2%80%94-%E5%85%A8%E8%A6%81%E7%B4%A0%E7%94%9F%E4%BA%A7%E7%8E%87"><span class="toc-number">9.2.</span> <span class="toc-text">经济增长的原因 —— 全要素生产率</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%8F%E6%B5%8E%E6%B3%A2%E5%8A%A8"><span class="toc-number">9.3.</span> <span class="toc-text">经济波动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%AF%E6%81%A9%E6%96%AF%E4%B8%BB%E4%B9%89-%E2%80%94%E2%80%94-%E4%BF%83%E8%BF%9B%E6%94%BF%E5%BA%9C%E8%B0%83%E8%8A%82%E7%BB%8F%E6%B5%8E"><span class="toc-number">9.4.</span> <span class="toc-text">凯恩斯主义 —— 促进政府调节经济</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E8%8A%82%E7%BB%8F%E6%B5%8E%E4%B8%A4%E7%A7%8D%E6%94%BF%E7%AD%96"><span class="toc-number">9.5.</span> <span class="toc-text">调节经济两种政策</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%B4%A2%E6%94%BF%E6%94%BF%E7%AD%96"><span class="toc-number">10.</span> <span class="toc-text">财政政策</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%B4%A7%E5%B8%81%E6%94%BF%E7%AD%96"><span class="toc-number">11.</span> <span class="toc-text">货币政策</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%A4%E7%A7%8D%E6%94%BF%E7%AD%96%E5%AF%B9%E7%BB%8F%E6%B5%8E%E5%BD%B1%E5%93%8D-%E2%80%94%E2%80%94-%E6%80%BB%E4%BE%9B%E7%BB%99%E6%80%BB%E9%9C%80%E6%B1%82%E6%A8%A1%E5%9E%8B"><span class="toc-number">11.1.</span> <span class="toc-text">两种政策对经济影响 —— 总供给总需求模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BD%E9%99%85%E7%BB%8F%E6%B5%8E"><span class="toc-number">11.2.</span> <span class="toc-text">国际经济</span></a></li></ol></li></ol></div></div></div><footer><nobr><span class="text-title">©</span><span class="text-content"></span></nobr><br><nobr><span class="text-title">ICP</span><span class="text-content"></span></nobr><br><text>published with <a target="_blank" rel="noopener" href="http://hexo.io">Hexo</a></text><text> Theme <a target="_blank" rel="noopener" href="https://github.com/Yue-plus/hexo-theme-arknights">Arknight</a></text><wbr><text>by <a target="_blank" rel="noopener" href="https://github.com/Yue-plus">Yue_plus</a></text></footer></aside></div></main><canvas id="canvas-dust"></canvas><script src="/js/search.js"></script><script>const reset=_=>{mermaid.init(undefined, ('.mermaid'));}</script><script src="//unpkg.com/@highlightjs/cdn-assets@11.4.0/highlight.min.js"></script><script src="/blog/js/arknights.js"></script><script>document.addEventListener("load",reset())</script></body></html>
