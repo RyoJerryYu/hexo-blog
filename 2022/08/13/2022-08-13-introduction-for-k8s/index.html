@@ -1,0 +1,139 @@
+<!DOCTYPE html><html lang="[&quot;zh&quot;,&quot;jp&quot;,&quot;default&quot;]"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Kubernetes 入门 （1） | Ryo's Blog</title><script>var config = {"hostname":"https://ryojerryyu.github.io/blog","root":"/blog/","preload":false,"path":""}</script><script src="//unpkg.com/mermaid@8.13.3/dist/mermaid.min.js"></script><script>mermaid.initialize({
+  startOnLoad: false
+  , theme: 'dark'
+});</script><script src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.6.1/MathJax.js"></script><script>MathJax.Hub.Config({
+  menuSettings: {
+    zoom: "None"
+  },
+  showMathMenu: false,
+  jax: ["input/TeX","output/CommonHTML"],
+  extensions: ["tex2jax.js"],
+  TeX: {
+    extensions: ["AMSmath.js","AMSsymbols.js"],
+    equationNumbers: {
+      autoNumber: "AMS"
+    }
+  },
+  tex2jax: {
+    inlineMath: [["\\(", "\\)"]],
+    displayMath: [["\\[", "\\]"]]
+  }
+});</script><link rel="stylesheet" href="/blog/css/arknights.css"><link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.4.0/styles/atom-one-dark-reasonable.min.css"><style>@font-face {
+ font-family: BenderLight;
+ src: local('Bender'), url("/blog/font/BenderLight.ttf");
+}
+@font-face {
+ font-family: 'JetBrains Mono';
+ src: local('JetBrains Mono'), url('/blog/font/JetBrainsMono-Regular.woff2') format('woff2');
+}</style><meta name="generator" content="Hexo 6.2.0"></head><body style="background-image:url(https://ak.hypergryph.com/assets/index/images/ak/pc/bk.jpg);"><div id="cursor-container"><div id="cursor-outer"></div><div id="cursor-effect"></div></div><main><header><nav><div class="navBtn"><i class="navBtnIcon"><span class="navBtnIconBar"></span><span class="navBtnIconBar"></span><span class="navBtnIconBar"></span></i></div><ol class="navContent"><li class="navItem search-header"><input autocomplete="off" autocorrect="off" autocapitalize="none" placeholder="数据检索" spellcheck="false" maxlength="50" type="text" id="search-input"></li><li class="navItem"><a href="/blog/"><span class="navItemTitle">Home</span></a></li><li class="navItem"><a href="/blog/archives/"><span class="navItemTitle">Archives</span></a></li></ol></nav><div class="search-popup"><div id="search-result"></div></div></header><article><div id="post-bg"><div id="post-title"><h1>Kubernetes 入门 （1）</h1><div id="post-info"><span>First Post:<span class="control"><time datetime="2022-08-13T09:45:31.000Z" id="date"> 2022-08-13</time></span></span><br><span>Last Update:<span class="control"><time datetime="2022-08-20T13:57:53.000Z" id="updated"> 2022-08-20</time></span></span></div></div><hr><div id="post-content"><h1 id="容器，-Docker-与-K8s"><a href="#容器，-Docker-与-K8s" class="headerlink" title="容器， Docker 与 K8s"></a>容器， Docker 与 K8s</h1><p>我们知道 K8s 利用了容器虚拟化技术。而说到容器虚拟化就要说 Docker 。可是，容器到底是什么？ Docker 又为我们做了些什么？我们又为什么要用 K8s ？</p>
+<h3 id="关于容器虚拟化"><a href="#关于容器虚拟化" class="headerlink" title="关于容器虚拟化"></a>关于容器虚拟化</h3><blockquote>
+<p>要把一个不知道打过多少个升级补丁，不知道经历了多少任管理员的系统迁移到其他机器上，毫无疑问会是一场灾难。 —— Chad Fowler 《Trash Your Servers and Burn Your Code》</p>
+</blockquote>
+<p>“Write once, run anywhere” 是 Java 曾经的口号。 Java 企图通过 JVM 虚拟机来实现一个可执行程序在多平台间的移植性。但我们现在知道， Java 语言并没能实现他的目标，会在操作系统调用、第三方依赖丢失、两个程序间依赖的冲突等各方面出现问题。</p>
+<p>要保证程序拉下来就能跑，最好的方法就是把程序和依赖打包到一起，然后将外部环境隔离起来。容器虚拟化技术就是为了解决这个。</p>
+<p>与常说的虚拟机不同， Docker 等各类容器是用隔离名称空间的方式进行资源隔离的。 Linux 系统的内核直接提供了名称空间隔离的能力，是针对进程设计的访问隔离机制，可以进行一些资源封装。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">名称空间</th>
+<th style="text-align:left">隔离内容</th>
+<th style="text-align:left">内核版本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Mount</td>
+<td style="text-align:left">文件系统与路径等</td>
+<td style="text-align:left">2.4.19</td>
+</tr>
+<tr>
+<td style="text-align:left">UTS</td>
+<td style="text-align:left">主机的Hostname、Domain names</td>
+<td style="text-align:left">2.6.19</td>
+</tr>
+<tr>
+<td style="text-align:left">IPC</td>
+<td style="text-align:left">进程间通信管道</td>
+<td style="text-align:left">2.6.19</td>
+</tr>
+<tr>
+<td style="text-align:left">PID</td>
+<td style="text-align:left">独立的进程编号空间</td>
+<td style="text-align:left">2.6.24</td>
+</tr>
+<tr>
+<td style="text-align:left">Network</td>
+<td style="text-align:left">网卡、IP 地址、端口等网络资源</td>
+<td style="text-align:left">2.6.29</td>
+</tr>
+<tr>
+<td style="text-align:left">User</td>
+<td style="text-align:left">进程独立的用户和用户组</td>
+<td style="text-align:left">3.8</td>
+</tr>
+<tr>
+<td style="text-align:left">Cgroup</td>
+<td style="text-align:left">CPU 时间片，内存分页等</td>
+<td style="text-align:left">4.6</td>
+</tr>
+<tr>
+<td style="text-align:left">Time &lt;- New!</td>
+<td style="text-align:left">进程独立的系统时间</td>
+<td style="text-align:left">5.6</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>值得注目的是， Linux 系统提供了 Cgroup 名称空间隔离的支持。通过隔离 Cgroup ，可以给单独一个进程分配 CPU 占用比率、内存大小、外设 I/O 访问权限等。再配合 IPC 、 PID 等的隔离，可以让被隔离的进程看不到同一实体机中其他进程的信息，就像是独享一整台机器一样。</p>
+<p>由于容器虚拟化技术直接利用了宿主机操作系统内核，因此远远要比虚拟机更轻量，也更适合用来给单个程序进行隔离。但也同样由于依赖了宿主机内核，在不同的架构、不同种类的操作系统间容器可能不能移植。</p>
+<h3 id="关于-Docker"><a href="#关于-Docker" class="headerlink" title="关于 Docker"></a>关于 Docker</h3><p>在介绍 K8s 之前，我们要先搞清楚 Docker 是什么。或者说，我们平时说的“ Docker ”是什么？</p>
+<p>我们平时说的 Docker ，可能是以下几个东西：</p>
+<ul>
+<li>Docker Engine: 在宿主机上跑的一个进程，专门用来管理各个容器的生命周期、网络连接等，还暴露出一些 API 供外部调用。有时会被称为 Docker Daemon 或是 dockerd 。</li>
+<li>Docker Client: 命令行中的 <code>docker</code> 命令，其实只会跟 Docker Server 通信，不会直接创建销毁一个容器进程。</li>
+<li>Docker Container: 宿主机上运行的一组被资源隔离的进程，在容器中看来像是独占了一台虚拟的机器，不需要考虑外部依赖。</li>
+<li>Docker Image: 是一个打包好的文件系统，可以从一个 Image 运行出复数个 Container 。 Image 内部包含了程序运行所需的所有文件、库依赖，以及运行时的环境变量等。</li>
+<li>Docker 容器运行时: 是 Docker Engine 中专门管理容器状态、生命周期等的那个组件，原来名为 libcontainer 。<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Open_Container_Initiative">《开放容器交互标准》</a>制定后， Docker 公司将此部分重构为 <a target="_blank" rel="noopener" href="https://github.com/opencontainers/runc">runC 项目</a>，交给 Linux 基金会管理。而 Docker Engine 中与运行时进行交互的部分则抽象出来成为 <a target="_blank" rel="noopener" href="https://containerd.io/">containerd 项目</a>，捐献给了 CNCF 。</li>
+</ul>
+<p>我们平时在 linux 机上运行 <code>yum install docker</code> 之类的命令，安装的其实是 Docker Engine + Docker Client 。（而在 Windows 或 MacOS 上安装的 Docker Desktop 其实是一个定制过的 linux 虚拟机。）下面说的 Docker 的功能其实都是指 Docker Engine 的功能。</p>
+<p>而 Docker 提供给我们的功能，除了最基础的运行和销毁容器外，还包括了一些容器网络编排、重启策略、文件路径映射、端口映射等功能。</p>
+<p>而我认为 Docker 最大的贡献，还是容器的镜像与镜像仓库。有了镜像与镜像仓库，人们就可以把自己的程序与执行环境直接打包成镜像发布，也可以直接拿打包好的镜像来运行容器进行部署，而不需要额外下载或是安装一些东西，也不需要担心程序会与已经跑起来的其他程序冲突。</p>
+<h3 id="为什么要用-K8s-？"><a href="#为什么要用-K8s-？" class="headerlink" title="为什么要用 K8s ？"></a>为什么要用 K8s ？</h3><p>其实 Docker 有一个很强大的工具叫 docker-compose ，可以通过一个 manifest 对多个容器组成的网络进行编排。那为什么我们还需要 K8s 呢？换句话说，有什么事是 Docker 不能做的？而 K8s 设计出来的目标是为了解决什么问题？</p>
+<p>首先， Docker 做不到以下的功能：</p>
+<ol>
+<li><strong>Docker 不能做跨多主机的容器编排。</strong> docker-compose 再方便，他也只能编排单台主机上的容器。对跨主机的集群编排无能为力。（实际上，用了 Docker-Swarm 后是可以多主机编排的，但一来 Docker-Swarm 出现的比 K8s 晚，而来 Docker-Swarm 功能不如 K8s ，因此用的人很少，我们下面就默认 Docker-Swarm 不存在了。）</li>
+<li><strong>Docker 提供的容器部署管理功能不够丰富。</strong> Docker 有一些简单的容器重启策略，但也只是简单的失败后重启之类的，没有完整的应用状态检查等功能。同时，版本升级、缩扩容等策略选择的余地也不多。</li>
+<li><strong>Docker 缺乏高级网络功能。</strong> 要让 Docker 的容器间进行网络通信，也只能是说把容器放到同一个网络下，然后再通过各自的 Hostname 来找到对方。但实际上，我们更会想要一些负载均衡、自定义域名、选择某些容器端口不暴露之类的功能。</li>
+</ol>
+<p>and more…</p>
+<p>总的来说， Docker 更关注单台主机上容器怎么跑，而对部署管理的功能则支持不多。而最大的痛点，就是 Docker 对多主机的集群部署支持的实再很差。然而，为了实现多区可用、负载均衡等功能，多主机集群的容器编排又是必不可少的。</p>
+<p>K8s 的出现，主要就是为了解决多主机集群上的容器编排问题。</p>
+<ol>
+<li><strong>K8s 可以进行多主机调度。</strong> 用户只需要描述自己需要运行怎样的应用， K8s 就可以自己选择一个合适的节点进行部署，用户不需要关心自己的应用部署到哪个节点上。</li>
+<li><strong>K8s 中一切皆资源。</strong> K8s 有完善的抽象资源机制，用户几乎不需要知道磁盘、网络等任何硬件信息，只需要对着统一的抽象资源进行操作。</li>
+<li><strong>K8s 能保证较强的可用性。</strong> 除了能跨多主机调度实现多区可用外， K8s 还提供了很完善的缩扩容机制、健康检查机制以及自动恢复机制。</li>
+</ol>
+<p>可以说， K8s 是容器编排工具的主流选择。</p>
+<h3 id="K8s-与-Docker-的关系"><a href="#K8s-与-Docker-的关系" class="headerlink" title="K8s 与 Docker 的关系"></a>K8s 与 Docker 的关系</h3><p>K8s 与 Docker 关系很复杂，是一个逐渐变化的过程。</p>
+<p>一开始 K8s 是完全依赖于 Docker Engine 进行容器启动与销毁的。后来<a target="_blank" rel="noopener" href="https://kubernetes.io/blog/2016/12/container-runtime-interface-cri-in-kubernetes/">容器运行时接口（CRI）</a>、 <a target="_blank" rel="noopener" href="https://github.com/cri-o/cri-o">CRI-O 标准</a>、开放容器交互标准（OCI）等标准逐渐建立，可替代 Docker Engine 的工具越来越多， K8s 中已经完全可以不使用 Docker Engine 了。</p>
+<p><a target="_blank" rel="noopener" href="http://icyfenix.cn/">《凤凰架构》</a>一书中有下面这样一张图来描述 K8s 与 Docker Engine 的关系：</p>
+<p><img src="http://icyfenix.cn/assets/img/kubernetes.495f9eae.png" alt="K8s 与 Docker Engine 的关系"></p>
+<p>《凤凰架构》书中<a target="_blank" rel="noopener" href="http://icyfenix.cn/immutable-infrastructure/container/history.html#%E5%B0%81%E8%A3%85%E9%9B%86%E7%BE%A4%EF%BC%9Akubernetes">这一章节</a>详细介绍了 K8s 与 Docker 的历史，我这里就不再赘述。</p>
+<h1 id="部署一个-Pod"><a href="#部署一个-Pod" class="headerlink" title="部署一个 Pod"></a>部署一个 Pod</h1><p>上面说了一堆概念，我们接下来实际上会怎样应用 K8s 。</p>
+<h3 id="Pod-示例"><a href="#Pod-示例" class="headerlink" title="Pod 示例"></a>Pod 示例</h3><blockquote>
+<p>Pod 是可以在 Kubernetes 中创建和管理的、最小的可部署的计算单元。<br>Pod 是一组容器；Pod 中的内容总是一同调度，在共享的上下文中运行。 Pod 中包含一个或多个应用容器，这些容器相对紧密地耦合在一起。在非云环境中，在相同的物理机或虚拟机上运行的应用类似于在同一逻辑主机上运行的云应用。<br>—— Kubernetes 官方文档</p>
+</blockquote>
+<p>Pod 是 K8s 的最小部署单位。</p>
+<p>因为 K8s 将硬件资源都抽象化了，用户不需要知道自己的应用部署到哪台机上。但是有些场景下两个主进程之间又必须相互协作才能完成任务，如果两个进程不确定会不会部署到同一个节点上会变得很麻烦。因此才需要 Pod 这种资源。</p>
+<p>下面是一个 Nginx Pod 的示例（这是 K8s manifest 文件，可以用 <code>kubectl apply -f &lt;filepath&gt;</code> 进行部署）：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">metadata:</span><br>  <span class="hljs-attr">name:</span> <span class="hljs-string">simple-webapp</span><br><span class="hljs-attr">spec:</span><br>  <span class="hljs-attr">containers:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">main-application</span><br>      <span class="hljs-attr">image:</span> <span class="hljs-string">nginx</span><br>      <span class="hljs-attr">volumeMounts:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">shared-logs</span><br>          <span class="hljs-attr">mountPath:</span> <span class="hljs-string">/var/log/nginx</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">sidecar-container</span><br>      <span class="hljs-attr">image:</span> <span class="hljs-string">busybox</span><br>      <span class="hljs-attr">command:</span> [<span class="hljs-string">&quot;sh&quot;</span>,<span class="hljs-string">&quot;-c&quot;</span>,<span class="hljs-string">&quot;while true; do cat /var/log/nginx/access.log; sleep 30; done&quot;</span>]<br>      <span class="hljs-attr">volumeMounts:</span><br>        <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">shared-logs</span><br>          <span class="hljs-attr">mountPath:</span> <span class="hljs-string">/var/log/nginx</span><br>  <span class="hljs-attr">volumes:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">shared-logs</span><br>      <span class="hljs-attr">emptyDir:</span> &#123;&#125;<br></code></pre></td></tr></table></figure>
+<p>可以看到， Pod 中可以包含多个容器，这组容器总是以一定的逻辑一起部署，且总是部署在同一个节点。对 K8s 操作时，不能说只部署 Pod 中一个特定的容器，也不能说把 Pod 中一个容器部署在这个节点，另一个容器部署在另一个节点上。</p>
+<p>在上面这个例子中，我们看到 Pod 中除了 Nginx 容器以外还有一个 Sidecar 容器负责将 Nginx 的 access.log 日志输出到控制台。两个容器可以通过 mount 同一个路径来实现文件共享。这种场景下，单独跑一个 Sidecar 容器没有意义，而我们也不会希望两个容器部署在不同的节点上。 <strong>两个容器同生共死</strong> ，这样的模式被称为 <strong>Sidecar 模式</strong> 。 Jaeger Agent ，或是 Service Mesh 中常见的 Envoy Sidecar 都可以通过这种模式部署，这样业务容器中就可以不考虑 tracing 或是流量控制相关的问题。</p>
+<p>此外，由于同一个 Pod 中的容器默认共享了相同的 network 和 UTS 名称空间，不管是在 Pod 的内部还是外部来看，他们一定程度上就像是真的部署在同一主机上一样，有相同的 Hostname 与 ip 地址，在一个容器中也可以通过 localhost 来访问零一个容器的端口。</p>
+<p>另外 Pod 中可以定义若干个 initContainer ，这些容器会比 <code>spec.containers</code> 中的容器先运行，并且是顺序运行。下面是通过安装 bitnami 的 Kafka Helm Chart 得到的一个 Kafka Broker Pod （有所简化）:</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span><br><span class="hljs-attr">kind:</span> <span class="hljs-string">Pod</span><br><span class="hljs-attr">metadata:</span><br>  <span class="hljs-attr">name:</span> <span class="hljs-string">kafka-0</span><br>  <span class="hljs-attr">namespace:</span> <span class="hljs-string">kafka</span><br><span class="hljs-attr">spec:</span><br>  <span class="hljs-attr">containers:</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">kafka</span><br>    <span class="hljs-attr">image:</span> <span class="hljs-string">docker.io/bitnami/kafka:3.1.0-debian-10-r52</span><br>    <span class="hljs-attr">command:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-string">/scripts/setup.sh</span><br>    <span class="hljs-attr">volumeMounts:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">scripts</span><br>      <span class="hljs-attr">mountPath:</span> <span class="hljs-string">/scripts/setup.sh</span><br>      <span class="hljs-attr">subPath:</span> <span class="hljs-string">setup.sh</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">shared</span><br>      <span class="hljs-attr">mountPath:</span> <span class="hljs-string">/shared</span><br>  <span class="hljs-attr">initContainers:</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">auto-discovery</span><br>    <span class="hljs-attr">image:</span> <span class="hljs-string">docker.io/bitnami/kubectl:1.23.5-debian-10-r1</span><br>    <span class="hljs-attr">command:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-string">/scripts/auto-discovery.sh</span><br>    <span class="hljs-attr">volumeMounts:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">shared</span><br>      <span class="hljs-attr">mountPath:</span> <span class="hljs-string">/shared</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">scripts</span><br>      <span class="hljs-attr">mountPath:</span> <span class="hljs-string">/scripts/auto-discovery.sh</span><br>      <span class="hljs-attr">subPath:</span> <span class="hljs-string">auto-discovery.sh</span><br>  <span class="hljs-attr">volumes:</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">scripts</span><br>    <span class="hljs-attr">configMap:</span><br>      <span class="hljs-attr">defaultMode:</span> <span class="hljs-number">493</span><br>      <span class="hljs-attr">name:</span> <span class="hljs-string">kafka-scripts</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">shared</span><br>    <span class="hljs-attr">emptyDir:</span> &#123;&#125;<br></code></pre></td></tr></table></figure>
+<p>可以看到，在 <code>kafka</code> pod 启动前会先启动一个名为 <code>auto-discovery</code> 的 initContainer ，负责获得集群信息等准备工作。准备工作完成后，会将信息写入 <code>/shared</code> 目录下，然后再启动 <code>kafka</code> 容器 Mount 同一目录，就可以获取准备好的信息。</p>
+<p><strong>这样运行容器进行 Pod 初始化就叫 initContainer 模式</strong> 。每个 initContainer 会运行到成功退出为止，如果有一个 initContainer 启动失败，则整个 Pod 启动失败，触发 K8s 的 Pod 重启策略。</p>
+<p><a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>.</p>
+<div id="paginator"></div></div><div id="post-footer"><div id="pages"><div id="footer-link" style="right: calc(50% - 1px);order: 1;border-right: 1px solid #fe2;padding-left: unset;max-width: calc(50% - 4px);"><a href="/blog/2022/08/20/2022-08-20-introduction-for-k8s-2/">← Next Kubernetes 入门 （2）</a></div><div id="footer-link" style="left: 50%;order: 0;border-left: 1px solid #fe2;padding-right: unset;max-width: calc(50% - 5px);"><a href="/blog/2022/07/31/2022-07-31-why-homogeneous/">为什么使用在齐次坐标下矩阵乘法能表示点平移？ Prev →</a></div></div></div></div><div id="bottom-btn"><a id="to-top" onClick="index.scrolltop();" title="to top" style="opacity: 0; display: none;">∧</a></div></article><div class="aside-box"><aside><div id="aside-top"><div id="about"><a href="/blog/" id="logo"><img src="https://ak.hypergryph.com/assets/index/images/ak/pc/faction/1.png" alt="Logo"></a><h1 id="Dr"><a href="/">Ryo Jerry Yu</a></h1><div id="description"><p>记录一些小事情。</p></div><!--if page.published === undefined--><section id="total"><a id="total-archives" href="/blog/archives"><span class="total-title">Archives Total:</span><span class="total-number">15</span></a><div id="total-tags"><span class="total-title">Tags:</span><span class="total-number">22</span></div><div id="total-categories"><span class="total-title">Categories:</span><span class="total-number">0</span></div></section></div><div id="aside-block"><div id="toc-div"><h1>INDEX</h1><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%EF%BC%8C-Docker-%E4%B8%8E-K8s"><span class="toc-number">1.</span> <span class="toc-text">容器， Docker 与 K8s</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E5%AE%B9%E5%99%A8%E8%99%9A%E6%8B%9F%E5%8C%96"><span class="toc-number">1.0.1.</span> <span class="toc-text">关于容器虚拟化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E-Docker"><span class="toc-number">1.0.2.</span> <span class="toc-text">关于 Docker</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8-K8s-%EF%BC%9F"><span class="toc-number">1.0.3.</span> <span class="toc-text">为什么要用 K8s ？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#K8s-%E4%B8%8E-Docker-%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">1.0.4.</span> <span class="toc-text">K8s 与 Docker 的关系</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2%E4%B8%80%E4%B8%AA-Pod"><span class="toc-number">2.</span> <span class="toc-text">部署一个 Pod</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Pod-%E7%A4%BA%E4%BE%8B"><span class="toc-number">2.0.1.</span> <span class="toc-text">Pod 示例</span></a></li></ol></li></ol></li></ol></div></div></div><footer><nobr><span class="text-title">©</span><span class="text-content"></span></nobr><br><nobr><span class="text-title">ICP</span><span class="text-content"></span></nobr><br><text>published with <a target="_blank" rel="noopener" href="http://hexo.io">Hexo</a></text><text> Theme <a target="_blank" rel="noopener" href="https://github.com/Yue-plus/hexo-theme-arknights">Arknight</a></text><wbr><text>by <a target="_blank" rel="noopener" href="https://github.com/Yue-plus">Yue_plus</a></text></footer></aside></div></main><canvas id="canvas-dust"></canvas><script src="/js/search.js"></script><script>const reset=_=>{mermaid.init(undefined, ('.mermaid'));}</script><script src="//unpkg.com/@highlightjs/cdn-assets@11.4.0/highlight.min.js"></script><script src="/blog/js/arknights.js"></script><script>document.addEventListener("load",reset())</script></body></html>
